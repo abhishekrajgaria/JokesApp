@@ -2,6 +2,7 @@ package com.example.jokesapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,8 +14,12 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 
     val jokes: StateFlow<List<Joke>> = _jokes.asStateFlow()
 
+    // As the View Model is initialized this will be called
+
     init {
-        viewModelScope.launch {
+
+        // Dispatcher for faster response of App
+        viewModelScope.launch (Dispatchers.IO){
             jokeRepository.jokes.collect { jokeList ->
                 _jokes.value = jokeList
 
@@ -23,7 +28,7 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
     }
 
     fun fetchJoke(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             jokeRepository.insertJoke()
         }
     }

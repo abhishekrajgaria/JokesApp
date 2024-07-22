@@ -1,5 +1,10 @@
 package com.example.jokesapp
 
+
+/*
+Author - Abhishek Rajgaria
+ */
+
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 
@@ -9,10 +14,12 @@ class JokeRepository(private val jokeService: JokeService, private val jokeDao: 
     suspend fun insertJoke(){
         val result = jokeService.getJoke()
 
-        if (result.body() != null){
-            jokeDao.insert(result.body()!!)
+        val joke: Joke? = result.body()
 
-            Log.d(null, result.body()!!.value)
+        if (joke != null){
+            jokeDao.insert(joke)
+
+            Log.d(null, joke.value)
         }
     }
 
