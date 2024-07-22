@@ -67,11 +67,19 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
+    //for room database
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:${room_version}")
     annotationProcessor("androidx.room:room-compiler:${room_version}")
 
-    
+    //for retrofit api calls
+    val retrofit_version = "2.6.2"
+    implementation("com.squareup.retrofit2:retrofit:${retrofit_version}")
+    implementation("com.squareup.retrofit2:converter-gson:${retrofit_version}")
+
+
+
 
 }

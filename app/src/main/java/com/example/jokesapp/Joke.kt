@@ -9,14 +9,18 @@ import androidx.room.Database
 import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.Insert
-import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
 
 @Entity
-class Joke (
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val joke: String
+data class Joke (
+    val categories: List<String>,
+    val created_at: String,
+    val icon_url: String,
+    val id: String,
+    val updated_at: String,
+    val url: String,
+    val value: String
 )
 
 @Dao
@@ -25,10 +29,10 @@ interface JokeDao {
     fun getAll(): List<Joke>
 
     @Insert
-    fun insert(joke: Joke)
+    suspend fun insert(joke: Joke)
 
     @Delete
-    fun delete(joke: Joke)
+    suspend fun delete(joke: Joke)
 }
 
 @Database(entities = [Joke::class], version = 1)
