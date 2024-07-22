@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -42,7 +44,7 @@ Author - Abhishek Rajgaria
 class MainActivity : ComponentActivity() {
 
 
-
+    private lateinit var jokeViewModel: JokeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
 
         val jokeRepository = JokeRepository(jokeService, jokeDao)
 
-        val jokeViewModel = ViewModelProvider(this, JokeViewModelFactory(jokeRepository)).get(JokeViewModel::class.java)
+        jokeViewModel = ViewModelProvider(this, JokeViewModelFactory(jokeRepository)).get(JokeViewModel::class.java)
 
         setContent {
 //            JokesAppTheme {
@@ -111,7 +113,7 @@ fun JokeApp( viewModel: JokeViewModel){
             ) {
 
             Button(
-                onClick = {}, //TODO:
+                onClick = {viewModel.fetchJoke()},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -127,7 +129,7 @@ fun JokeApp( viewModel: JokeViewModel){
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(jokes) {joke ->
+                items(jokes.reversed()) {joke ->
 
                     Card(
                         modifier = Modifier
@@ -138,7 +140,8 @@ fun JokeApp( viewModel: JokeViewModel){
                     ) {
                         Text(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .padding(16.dp),
                             textAlign = TextAlign.Left,
                             text = joke.value
                         )
