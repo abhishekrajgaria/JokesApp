@@ -15,7 +15,10 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            _jokes.value = jokeRepository.getAllJokes()
+            jokeRepository.jokes.collect { jokeList ->
+                _jokes.value = jokeList
+
+            }
         }
     }
 
