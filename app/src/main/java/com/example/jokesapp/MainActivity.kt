@@ -25,10 +25,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import com.example.jokesapp.ui.theme.JokesAppTheme
 
 
@@ -37,12 +40,27 @@ Author - Abhishek Rajgaria
  */
 
 class MainActivity : ComponentActivity() {
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val jokeService = JokeServiceHelper.getInstance().create(JokeService::class.java)
+        val jokeDatabase = Room.databaseBuilder(
+            applicationContext,
+            JokeDatabase::class.java, "jokes_db"
+        ).build()
+        val jokeDao = jokeDatabase.jokeDao()
+
+        val jokeRepository = JokeRepository(jokeService, jokeDao)
+
+        val jokeViewModel = ViewModelProvider(this, JokeViewModelFactory(jokeRepository)).get(JokeViewModel::class.java)
+
         setContent {
 //            JokesAppTheme {
-                JokeApp()
+                JokeApp(jokeViewModel)
 //            }
         }
     }
@@ -51,9 +69,10 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JokeApp(){
+fun JokeApp( viewModel: JokeViewModel){
 
-    val jokes:List<String> = listOf("Joke 1: Hahaha", "Joke 2: Nananan", "Joke 3: Jajaja")
+//    val jokes:List<String> = listOf("Joke 1: Hahaha", "Joke 2: Nananan", "Joke 3: Jajaja")
+    val jokes:List<Joke> = viewModel.jokes.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -121,7 +140,7 @@ fun JokeApp(){
                             modifier = Modifier
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Left,
-                            text = joke
+                            text = joke.value
                         )
                     }
                 }

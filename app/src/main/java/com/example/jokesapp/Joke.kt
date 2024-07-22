@@ -26,7 +26,7 @@ data class Joke (
 @Dao
 interface JokeDao {
     @Query("SELECT * FROM joke")
-    fun getAll(): List<Joke>
+    suspend fun getAll(): List<Joke>
 
     @Insert
     suspend fun insert(joke: Joke)
@@ -36,6 +36,6 @@ interface JokeDao {
 }
 
 @Database(entities = [Joke::class], version = 1)
-abstract class JokeDatabase: RoomDatabase() {
+abstract class JokeDatabase : RoomDatabase() {
     abstract fun jokeDao(): JokeDao
 }
