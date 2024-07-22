@@ -1,19 +1,20 @@
 package com.example.jokesapp
 
-class JokeRepository(private val jokeService: JokeService, private val jokeDao: JokeDao) {
+import android.util.Log
+import kotlinx.coroutines.flow.Flow
 
+class JokeRepository(private val jokeService: JokeService, private val jokeDao: JokeDao) {
+    val jokes: Flow<List<Joke>> = jokeDao.getAll()
 
     suspend fun insertJoke(){
         val result = jokeService.getJoke()
 
-        val joke: Joke? = result.body()
-        if (joke!=null){
-            jokeDao.insert(joke)
+        if (result.body() != null){
+            jokeDao.insert(result.body()!!)
+
+            Log.d(null, result.body()!!.value)
         }
     }
 
-    suspend fun getAllJokes(): List<Joke>{
-        val jokes: List<Joke> = jokeDao.getAll()
-        return jokes
-    }
+
 }
