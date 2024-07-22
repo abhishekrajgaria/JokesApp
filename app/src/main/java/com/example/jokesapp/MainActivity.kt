@@ -40,8 +40,9 @@ Author - Abhishek Rajgaria
 
 class MainActivity : ComponentActivity() {
 
-
+    // To Initialize non-null property
     private lateinit var jokeViewModel: JokeViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
         val jokeService = JokeServiceHelper.getInstance().create(JokeService::class.java)
         val jokeDatabase = Room.databaseBuilder(
             applicationContext,
-            JokeDatabase::class.java, "jokes_db"
+            JokeDatabase::class.java, "jokesDB"
         ).build()
         val jokeDao = jokeDatabase.jokeDao()
 

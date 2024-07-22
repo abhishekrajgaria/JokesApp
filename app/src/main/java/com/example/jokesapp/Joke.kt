@@ -15,7 +15,9 @@ import androidx.room.RoomDatabase
 
 @Entity(tableName = "jokes")
 data class Joke (
-
+    //Not able to get categories work, getting null error
+    // even with lateinit
+    //val categories: List<String>,
     val created_at: String,
     val icon_url: String,
 
