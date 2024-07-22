@@ -41,3 +41,5 @@
    - https://www.youtube.com/watch?v=uIctBzZGPM8
  - For Flow Update
    - https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
+ - For Room Dependencies
+   - https://developer.android.com/jetpack/androidx/releases/room
